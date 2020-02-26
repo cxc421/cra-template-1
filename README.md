@@ -1,44 +1,76 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# CRA with ESLint, Prettier, Typescript, Husky, Lint-Staged
 
-## Available Scripts
+### Test CRA version: **3.4.0**
 
-In the project directory, you can run:
+## Step 1: Create CRA project with typescript
 
-### `yarn start`
+```console
+npx create-react-app my-app --template typescript
+```
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Step 2: Install dependencies
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+```console
+yarn add -D eslint eslint-config-prettier husky lint-staged npm-run-all prettier
+```
 
-### `yarn test`
+## Step 3: Setup Prettier
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Create `.prettier` file to your project root folder. (
+[Offical Website](https://prettier.io/playground/) )
 
-### `yarn build`
+## Step 3: Adjust ESLint
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Adjust ESLint setting in package.json to avoid confilct bewtween ESlint and
+prettier.
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+```json
+{
+  "eslintConfig": {
+    "extends": ["react-app", "prettier"]
+  }
+}
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Step 4: Setup Husky and Lint-Staged
 
-### `yarn eject`
+Add following scripts to package.json:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```json
+{
+  "scripts": {
+    //...
+    "lint": "eslint --ext .tsx,.ts src/",
+    "check-types": "tsc",
+    "prettier": "prettier --ignore-path .gitignore \"**/*.+(js|json|ts|tsx|css|html)\"",
+    "format": "npm run prettier -- --write",
+    "check-format": "npm run prettier -- --list-different",
+    "validate": "run-p check-types check-format lint build"
+  }
+}
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Then setup lint-staged to execute prettier and eslint check on commited files.
+Add following `"lint-staged"` section into package.json:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```json
+{
+  "lint-staged": {
+    "*.+(js|ts|tsx)": ["eslint"],
+    "**/*.+(js|json|ts|tsx|css|html)": ["prettier --write"]
+  }
+}
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Finally, setup husky to execute scripts before any commit. Add folowing
+`"husky"` section into package.json:
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+```json
+{
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run check-types && lint-staged && npm run build"
+    }
+  }
+}
+```
