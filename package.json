@@ -47,6 +47,12 @@
       "last 1 safari version"
     ]
   },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "prettier"
+    ]
+  },
   "husky": {
     "hooks": {
       "pre-commit": "npm run check-types && lint-staged && npm run build"
