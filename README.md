@@ -50,8 +50,8 @@ Add following scripts to package.json:
 }
 ```
 
-Then setup lint-staged to execute prettier and eslint check on commited files.
-Add following `"lint-staged"` section into package.json:
+Then setup lint-staged to execute prettier and eslint on commited files. Add
+following `"lint-staged"` section into package.json:
 
 ```json
 {
