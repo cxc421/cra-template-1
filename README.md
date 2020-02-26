@@ -19,7 +19,7 @@ yarn add -D eslint eslint-config-prettier husky lint-staged npm-run-all prettier
 Create `.prettier` file to your project root folder. (
 [Offical Website](https://prettier.io/playground/) )
 
-## Step 3: Adjust ESLint
+## Step 4: Adjust ESLint
 
 Adjust ESLint setting in package.json to avoid confilct bewtween ESlint and
 prettier.
@@ -32,7 +32,7 @@ prettier.
 }
 ```
 
-## Step 4: Setup Husky and Lint-Staged
+## Step 5: Setup Husky and Lint-Staged
 
 Add following scripts to package.json:
 
